@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -21,19 +21,38 @@ export default function LoanApplication() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
 
+  useEffect(() => {
+    const savedData = localStorage.getItem('loanApplicationData');
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+      setCurrentStep(parseInt(localStorage.getItem('loanApplicationStep') || '0'));
+    }
+  }, []);
+
   const updateFormData = (data) => {
-    setFormData((prev) => ({ ...prev, ...data }));
+    const updatedData = { ...formData, ...data };
+    setFormData(updatedData);
+    localStorage.setItem('loanApplicationData', JSON.stringify(updatedData));
+    localStorage.setItem('loanApplicationStep', currentStep.toString());
   };
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
-      setCurrentStep((prev) => prev + 1);
+      setCurrentStep((prev) => {
+        const newStep = prev + 1;
+        localStorage.setItem('loanApplicationStep', newStep.toString());
+        return newStep;
+      });
     }
   };
 
   const prevStep = () => {
     if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1);
+      setCurrentStep((prev) => {
+        const newStep = prev - 1;
+        localStorage.setItem('loanApplicationStep', newStep.toString());
+        return newStep;
+      });
     }
   };
 

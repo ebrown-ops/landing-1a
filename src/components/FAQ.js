@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { Input } from "@/components/ui/input"
 
 const faqData = [
   {
@@ -24,18 +26,35 @@ const faqData = [
 ];
 
 export default function FAQ() {
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const filteredFAQs = faqData.filter(item =>
+    item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="py-16 bg-gray-50">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">Frequently Asked Questions</h2>
+        <Input
+          type="text"
+          placeholder="Search FAQs..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="mb-6"
+        />
         <Accordion type="single" collapsible className="w-full">
-          {faqData.map((item, index) => (
+          {filteredFAQs.map((item, index) => (
             <AccordionItem value={`item-${index}`} key={index}>
               <AccordionTrigger>{item.question}</AccordionTrigger>
               <AccordionContent>{item.answer}</AccordionContent>
             </AccordionItem>
           ))}
         </Accordion>
+        {filteredFAQs.length === 0 && (
+          <p className="text-center text-gray-600 mt-4">No matching FAQs found. Please try a different search term.</p>
+        )}
       </div>
     </div>
   );
