@@ -9,6 +9,7 @@ import ConfirmationStep from '@/components/ConfirmationStep';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence } from "framer-motion";
+import LoadingButton from '@/components/LoadingButton';
 
 const steps = [
   { id: 'personal', title: 'Personal Info' },
@@ -20,6 +21,7 @@ const steps = [
 export default function LoanApplication() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const savedData = localStorage.getItem('loanApplicationData');
@@ -38,11 +40,15 @@ export default function LoanApplication() {
 
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
-      setCurrentStep((prev) => {
-        const newStep = prev + 1;
-        localStorage.setItem('loanApplicationStep', newStep.toString());
-        return newStep;
-      });
+      setIsLoading(true);
+      setTimeout(() => {
+        setCurrentStep((prev) => {
+          const newStep = prev + 1;
+          localStorage.setItem('loanApplicationStep', newStep.toString());
+          setIsLoading(false);
+          return newStep;
+        });
+      }, 1000);
     }
   };
 
@@ -72,16 +78,16 @@ export default function LoanApplication() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-white dark:from-gray-900 dark:to-gray-800">
       <Header />
       <main className="flex-grow">
         <div className="max-w-4xl mx-auto pt-16 px-4">
-          <h1 className="text-4xl font-bold text-blue-900 mb-8 text-center">SMB Loan Application</h1>
+          <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-100 mb-8 text-center">SMB Loan Application</h1>
           
-          <div className="bg-white shadow-xl rounded-lg p-8">
+          <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8">
             <div className="mb-8">
               <Progress value={(currentStep / (steps.length - 1)) * 100} className="w-full" />
-              <p className="text-center mt-2 text-sm text-gray-600">Step {currentStep + 1} of {steps.length}</p>
+              <p className="text-center mt-2 text-sm text-gray-600 dark:text-gray-400">Step {currentStep + 1} of {steps.length}</p>
             </div>
 
             <nav className="mb-8">
@@ -90,13 +96,13 @@ export default function LoanApplication() {
                   <TooltipProvider key={step.id}>
                     <Tooltip>
                       <TooltipTrigger>
-                        <li className={`flex items-center ${index <= currentStep ? 'text-blue-600' : 'text-gray-400'}`}>
-                          <span className={`w-8 h-8 flex items-center justify-center rounded-full ${index <= currentStep ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}>
+                        <li className={`flex items-center ${index <= currentStep ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-600'}`}>
+                          <span className={`w-8 h-8 flex items-center justify-center rounded-full ${index <= currentStep ? 'bg-blue-600 dark:bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700'}`}>
                             {index + 1}
                           </span>
                           <span className="ml-2 text-sm font-medium hidden sm:inline">{step.title}</span>
                           {index < steps.length - 1 && (
-                            <span className="mx-2 text-gray-300 hidden sm:inline">&gt;</span>
+                            <span className="mx-2 text-gray-300 dark:text-gray-600 hidden sm:inline">&gt;</span>
                           )}
                         </li>
                       </TooltipTrigger>
@@ -125,16 +131,16 @@ export default function LoanApplication() {
               <Button onClick={prevStep} disabled={currentStep === 0} variant="outline">
                 Previous
               </Button>
-              <Button onClick={nextStep} disabled={currentStep === steps.length - 1}>
+              <LoadingButton onClick={nextStep} loading={isLoading} disabled={currentStep === steps.length - 1}>
                 {currentStep === steps.length - 1 ? 'Submit Application' : 'Next'}
-              </Button>
+              </LoadingButton>
             </div>
           </div>
 
-          <div className="mt-12 text-center text-sm text-gray-600">
+          <div className="mt-12 text-center text-sm text-gray-600 dark:text-gray-400">
             <p>Trusted by over 10,000 small businesses</p>
             <p className="mt-2">🔒 Your information is secure and encrypted</p>
-            <p className="mt-2 text-blue-600 font-semibold">Limited time offer: Get approved today and receive a 0.5% interest rate discount!</p>
+            <p className="mt-2 text-blue-600 dark:text-blue-400 font-semibold">Limited time offer: Get approved today and receive a 0.5% interest rate discount!</p>
           </div>
         </div>
       </main>
