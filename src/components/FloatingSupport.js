@@ -12,7 +12,7 @@ export default function FloatingSupport() {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {isOpen && (
-        <div className="bg-white rounded-lg shadow-xl p-4 mb-4 w-80">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-4 mb-4 w-80">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-semibold">Need Help?</h3>
             <Button variant="ghost" size="sm" onClick={toggleChat}>
@@ -23,9 +23,11 @@ export default function FloatingSupport() {
           <Button className="w-full">Start Chat</Button>
         </div>
       )}
-      <Button className="rounded-full p-4" onClick={toggleChat}>
-        <MessageCircle className="h-6 w-6" />
-      </Button>
+      {!isOpen && (
+        <Button className="rounded-full p-4" onClick={toggleChat}>
+          <MessageCircle className="h-6 w-6" />
+        </Button>
+      )}
     </div>
   );
 }
