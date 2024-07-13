@@ -29,16 +29,26 @@ export default function LoanApplication() {
   useEffect(() => {
     const savedData = localStorage.getItem('loanApplicationData');
     if (savedData) {
-      setFormData(JSON.parse(savedData));
-      setCurrentStep(parseInt(localStorage.getItem('loanApplicationStep') || '0'));
+      try {
+        setFormData(JSON.parse(savedData));
+        setCurrentStep(parseInt(localStorage.getItem('loanApplicationStep') || '0'));
+      } catch (err) {
+        console.error('Error parsing saved data:', err);
+        setError('There was an error loading your saved data. Please start a new application.');
+      }
     }
   }, []);
 
   const updateFormData = (data) => {
-    const updatedData = { ...formData, ...data };
-    setFormData(updatedData);
-    localStorage.setItem('loanApplicationData', JSON.stringify(updatedData));
-    localStorage.setItem('loanApplicationStep', currentStep.toString());
+    try {
+      const updatedData = { ...formData, ...data };
+      setFormData(updatedData);
+      localStorage.setItem('loanApplicationData', JSON.stringify(updatedData));
+      localStorage.setItem('loanApplicationStep', currentStep.toString());
+    } catch (err) {
+      console.error('Error updating form data:', err);
+      setError('There was an error saving your data. Please try again.');
+    }
   };
 
   const nextStep = async () => {
@@ -54,6 +64,7 @@ export default function LoanApplication() {
           return newStep;
         });
       } catch (err) {
+        console.error('Error moving to next step:', err);
         setError("An error occurred while processing your request. Please try again.");
       } finally {
         setIsLoading(false);
@@ -84,6 +95,7 @@ export default function LoanApplication() {
       // Navigate to dashboard or show success message
       console.log("Application submitted successfully");
     } catch (err) {
+      console.error('Error submitting application:', err);
       setError(err.message);
     } finally {
       setIsLoading(false);
