@@ -41,19 +41,23 @@ export default function LoanApplication() {
     localStorage.setItem('loanApplicationStep', currentStep.toString());
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (currentStep < steps.length - 1) {
       setIsLoading(true);
       setError(null);
-      // Simulate API call
-      setTimeout(() => {
+      try {
+        // Simulate API call
+        await new Promise(resolve => setTimeout(resolve, 1000));
         setCurrentStep((prev) => {
           const newStep = prev + 1;
           localStorage.setItem('loanApplicationStep', newStep.toString());
-          setIsLoading(false);
           return newStep;
         });
-      }, 1000);
+      } catch (err) {
+        setError("An error occurred while processing your request. Please try again.");
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
 
@@ -67,20 +71,23 @@ export default function LoanApplication() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setIsLoading(true);
     setError(null);
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
       // Simulating a random error
       if (Math.random() < 0.1) {
-        setError("An error occurred while submitting your application. Please try again.");
-      } else {
-        // Navigate to dashboard or show success message
-        console.log("Application submitted successfully");
+        throw new Error("An error occurred while submitting your application. Please try again.");
       }
+      // Navigate to dashboard or show success message
+      console.log("Application submitted successfully");
+    } catch (err) {
+      setError(err.message);
+    } finally {
       setIsLoading(false);
-    }, 2000);
+    }
   };
 
   const renderStep = () => {
