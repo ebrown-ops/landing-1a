@@ -4,9 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageCircle, X } from "lucide-react";
 
+const initialMessages = [
+  { text: "Hello! How can I assist you today?", sender: 'bot' },
+];
+
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState(initialMessages);
   const [input, setInput] = useState('');
 
   const toggleChat = () => setIsOpen(!isOpen);
@@ -37,7 +41,7 @@ export default function Chatbot() {
           <CardContent className="flex-grow overflow-y-auto mb-4">
             {messages.map((message, index) => (
               <div key={index} className={`mb-2 ${message.sender === 'user' ? 'text-right' : 'text-left'}`}>
-                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}>
+                <span className={`inline-block p-2 rounded-lg ${message.sender === 'user' ? 'bg-blue-500 text-white' : 'bg-gray-200 dark:bg-gray-700 dark:text-gray-200'}`}>
                   {message.text}
                 </span>
               </div>

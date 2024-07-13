@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 const testimonials = [
   {
@@ -47,13 +48,23 @@ export default function Testimonials() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center text-blue-900 dark:text-blue-100 mb-12">What Our Clients Say</h2>
         <div className="relative">
-          <Card className="bg-white dark:bg-gray-700 shadow-lg">
-            <CardContent className="p-6">
-              <p className="text-gray-600 dark:text-gray-300 italic mb-4">"{testimonials[currentIndex].quote}"</p>
-              <p className="font-semibold text-gray-800 dark:text-gray-100">{testimonials[currentIndex].name}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[currentIndex].company}</p>
-            </CardContent>
-          </Card>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -50 }}
+              transition={{ duration: 0.3 }}
+            >
+              <Card className="bg-white dark:bg-gray-700 shadow-lg">
+                <CardContent className="p-6">
+                  <p className="text-gray-600 dark:text-gray-300 italic mb-4">"{testimonials[currentIndex].quote}"</p>
+                  <p className="font-semibold text-gray-800 dark:text-gray-100">{testimonials[currentIndex].name}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[currentIndex].company}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
           <div className="absolute top-1/2 -left-4 -translate-y-1/2">
             <Button variant="ghost" size="icon" onClick={prevTestimonial}>
               <ChevronLeft className="h-6 w-6" />
