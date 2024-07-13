@@ -1,4 +1,7 @@
-import { Card, CardContent } from "@/components/ui/card"
+import { useState, useEffect } from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const testimonials = [
   {
@@ -15,24 +18,52 @@ const testimonials = [
     name: "Michael Chen",
     company: "Fusion Eats Restaurant",
     quote: "The team at SMB Loans guided us through every step of the loan process. Their support was invaluable in helping us open our second location."
+  },
+  {
+    name: "Emily Rodriguez",
+    company: "Artisan Crafts Co.",
+    quote: "SMB Loans provided us with flexible financing options that perfectly suited our seasonal business model. Highly recommended!"
   }
 ];
 
 export default function Testimonials() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  };
+
+  const prevTestimonial = () => {
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + testimonials.length) % testimonials.length);
+  };
+
+  useEffect(() => {
+    const timer = setInterval(nextTestimonial, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
-    <section className="bg-gray-50 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-blue-900 mb-12">What Our Clients Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index}>
-              <CardContent className="p-6">
-                <p className="text-gray-600 italic mb-4">"{testimonial.quote}"</p>
-                <p className="font-semibold">{testimonial.name}</p>
-                <p className="text-sm text-gray-500">{testimonial.company}</p>
-              </CardContent>
-            </Card>
-          ))}
+    <section className="bg-gray-50 dark:bg-gray-800 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-center text-blue-900 dark:text-blue-100 mb-12">What Our Clients Say</h2>
+        <div className="relative">
+          <Card className="bg-white dark:bg-gray-700 shadow-lg">
+            <CardContent className="p-6">
+              <p className="text-gray-600 dark:text-gray-300 italic mb-4">"{testimonials[currentIndex].quote}"</p>
+              <p className="font-semibold text-gray-800 dark:text-gray-100">{testimonials[currentIndex].name}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{testimonials[currentIndex].company}</p>
+            </CardContent>
+          </Card>
+          <div className="absolute top-1/2 -left-4 -translate-y-1/2">
+            <Button variant="ghost" size="icon" onClick={prevTestimonial}>
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+          </div>
+          <div className="absolute top-1/2 -right-4 -translate-y-1/2">
+            <Button variant="ghost" size="icon" onClick={nextTestimonial}>
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
