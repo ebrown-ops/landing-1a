@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import PersonalInfoStep from '@/components/PersonalInfoStep';
 import BusinessInfoStep from '@/components/BusinessInfoStep';
 import LoanDetailsStep from '@/components/LoanDetailsStep';
@@ -10,6 +11,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion, AnimatePresence } from "framer-motion";
 import LoadingButton from '@/components/LoadingButton';
+import FAQ from '@/components/FAQ';
 
 const steps = [
   { id: 'personal', title: 'Personal Info' },
@@ -22,6 +24,7 @@ export default function LoanApplication() {
   const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const savedData = localStorage.getItem('loanApplicationData');
@@ -41,6 +44,8 @@ export default function LoanApplication() {
   const nextStep = () => {
     if (currentStep < steps.length - 1) {
       setIsLoading(true);
+      setError(null);
+      // Simulate API call
       setTimeout(() => {
         setCurrentStep((prev) => {
           const newStep = prev + 1;
@@ -60,6 +65,22 @@ export default function LoanApplication() {
         return newStep;
       });
     }
+  };
+
+  const handleSubmit = () => {
+    setIsLoading(true);
+    setError(null);
+    // Simulate API call
+    setTimeout(() => {
+      // Simulating a random error
+      if (Math.random() < 0.1) {
+        setError("An error occurred while submitting your application. Please try again.");
+      } else {
+        // Navigate to dashboard or show success message
+        console.log("Application submitted successfully");
+      }
+      setIsLoading(false);
+    }, 2000);
   };
 
   const renderStep = () => {
@@ -84,6 +105,13 @@ export default function LoanApplication() {
         <div className="max-w-4xl mx-auto pt-16 px-4">
           <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-100 mb-8 text-center">SMB Loan Application</h1>
           
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
           <div className="bg-white dark:bg-gray-800 shadow-xl rounded-lg p-8">
             <div className="mb-8">
               <Progress value={(currentStep / (steps.length - 1)) * 100} className="w-full" />
@@ -131,7 +159,10 @@ export default function LoanApplication() {
               <Button onClick={prevStep} disabled={currentStep === 0} variant="outline">
                 Previous
               </Button>
-              <LoadingButton onClick={nextStep} loading={isLoading} disabled={currentStep === steps.length - 1}>
+              <LoadingButton 
+                onClick={currentStep === steps.length - 1 ? handleSubmit : nextStep} 
+                loading={isLoading} 
+              >
                 {currentStep === steps.length - 1 ? 'Submit Application' : 'Next'}
               </LoadingButton>
             </div>
@@ -142,6 +173,8 @@ export default function LoanApplication() {
             <p className="mt-2">🔒 Your information is secure and encrypted</p>
             <p className="mt-2 text-blue-600 dark:text-blue-400 font-semibold">Limited time offer: Get approved today and receive a 0.5% interest rate discount!</p>
           </div>
+
+          <FAQ />
         </div>
       </main>
       <Footer />

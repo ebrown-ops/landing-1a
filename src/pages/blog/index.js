@@ -1,5 +1,8 @@
 import Link from 'next/link';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card } from "@/components/Card";
+import Header from '@/components/Header';
+import Footer from '@/components/Footer';
+import SEO from '@/components/SEO';
 
 const blogPosts = [
   {
@@ -24,27 +27,38 @@ const blogPosts = [
 
 export default function BlogIndex() {
   return (
-    <div className="max-w-4xl mx-auto py-16 px-4">
-      <h1 className="text-4xl font-bold text-blue-900 mb-8">SMB Loans Blog</h1>
-      <div className="grid gap-8">
-        {blogPosts.map((post) => (
-          <Card key={post.id}>
-            <CardHeader>
-              <CardTitle>
-                <Link href={`/blog/${post.slug}`} className="text-blue-600 hover:underline">
-                  {post.title}
-                </Link>
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">{post.excerpt}</p>
-              <Link href={`/blog/${post.slug}`} className="text-blue-500 hover:underline mt-4 inline-block">
-                Read more
-              </Link>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+    <div className="flex flex-col min-h-screen">
+      <SEO 
+        title="SMB Loans Blog" 
+        description="Read our latest articles on small business loans, financing tips, and more."
+        keywords={['SMB loans', 'business financing', 'loan tips']}
+      />
+      <Header />
+      <main className="flex-grow">
+        <div className="max-w-4xl mx-auto py-16 px-4">
+          <h1 className="text-4xl font-bold text-blue-900 dark:text-blue-100 mb-8">SMB Loans Blog</h1>
+          <div className="grid gap-8">
+            {blogPosts.map((post) => (
+              <Card key={post.id}>
+                <Card.Header>
+                  <Card.Title>
+                    <Link href={`/blog/${post.slug}`} className="text-blue-600 dark:text-blue-400 hover:underline">
+                      {post.title}
+                    </Link>
+                  </Card.Title>
+                </Card.Header>
+                <Card.Content>
+                  <p className="text-gray-600 dark:text-gray-300">{post.excerpt}</p>
+                  <Link href={`/blog/${post.slug}`} className="text-blue-500 hover:underline mt-4 inline-block">
+                    Read more
+                  </Link>
+                </Card.Content>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
 }
