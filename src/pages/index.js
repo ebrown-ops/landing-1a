@@ -5,6 +5,7 @@ import Footer from '@/components/Footer'
 import FAQ from '@/components/FAQ'
 import Testimonials from '@/components/Testimonials'
 import WhyChooseUs from '@/components/WhyChooseUs'
+import LoanCalculator from '@/components/LoanCalculator'
 
 export default function Home() {
   return (
@@ -29,6 +30,13 @@ export default function Home() {
         </div>
 
         <WhyChooseUs />
+
+        <div className="py-16 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-blue-900 mb-12">Calculate Your Loan</h2>
+            <LoanCalculator />
+          </div>
+        </div>
 
         <Testimonials />
 
