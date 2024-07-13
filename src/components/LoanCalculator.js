@@ -10,6 +10,7 @@ export default function LoanCalculator() {
   const [interestRate, setInterestRate] = useState('');
   const [loanTerm, setLoanTerm] = useState('');
   const [monthlyPayment, setMonthlyPayment] = useState(null);
+  const [totalInterest, setTotalInterest] = useState(null);
   const [amortizationSchedule, setAmortizationSchedule] = useState([]);
 
   const calculateLoan = () => {
@@ -22,6 +23,9 @@ export default function LoanCalculator() {
       const monthly = (principal * x * rate) / (x - 1);
       setMonthlyPayment(monthly.toFixed(2));
 
+      const totalPaid = monthly * time;
+      setTotalInterest((totalPaid - principal).toFixed(2));
+
       // Calculate amortization schedule
       let balance = principal;
       const schedule = [];
@@ -32,7 +36,9 @@ export default function LoanCalculator() {
         schedule.push({
           month: i,
           balance: balance.toFixed(2),
-          payment: monthly.toFixed(2)
+          payment: monthly.toFixed(2),
+          interest: interest.toFixed(2),
+          principal: principalPayment.toFixed(2)
         });
       }
       setAmortizationSchedule(schedule);
@@ -86,6 +92,7 @@ export default function LoanCalculator() {
         {monthlyPayment && (
           <div className="mt-6">
             <p className="text-lg font-semibold">Estimated Monthly Payment: <span className="text-2xl text-blue-600">${monthlyPayment}</span></p>
+            <p className="text-lg font-semibold mt-2">Total Interest Paid: <span className="text-2xl text-blue-600">${totalInterest}</span></p>
           </div>
         )}
         {amortizationSchedule.length > 0 && (
@@ -97,8 +104,9 @@ export default function LoanCalculator() {
                 <XAxis dataKey="month" />
                 <YAxis />
                 <Tooltip />
-                <Line type="monotone" dataKey="balance" stroke="#8884d8" />
-                <Line type="monotone" dataKey="payment" stroke="#82ca9d" />
+                <Line type="monotone" dataKey="balance" stroke="#8884d8" name="Balance" />
+                <Line type="monotone" dataKey="payment" stroke="#82ca9d" name="Payment" />
+                <Line type="monotone" dataKey="interest" stroke="#ffc658" name="Interest" />
               </LineChart>
             </ResponsiveContainer>
           </div>
