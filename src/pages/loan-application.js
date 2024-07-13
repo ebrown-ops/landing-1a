@@ -61,6 +61,7 @@ export default function LoanApplication() {
           <div className="bg-white shadow-xl rounded-lg p-8">
             <div className="mb-8">
               <Progress value={(currentStep / (steps.length - 1)) * 100} className="w-full" />
+              <p className="text-center mt-2 text-sm text-gray-600">Step {currentStep + 1} of {steps.length}</p>
             </div>
 
             <nav className="mb-8">
@@ -95,7 +96,7 @@ export default function LoanApplication() {
                 Previous
               </Button>
               <Button onClick={nextStep} disabled={currentStep === steps.length - 1}>
-                {currentStep === steps.length - 1 ? 'Submit' : 'Next'}
+                {currentStep === steps.length - 1 ? 'Submit Application' : 'Next'}
               </Button>
             </div>
           </div>
