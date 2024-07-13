@@ -3,6 +3,8 @@ import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import FAQ from '@/components/FAQ'
+import Testimonials from '@/components/Testimonials'
+import WhyChooseUs from '@/components/WhyChooseUs'
 
 export default function Home() {
   return (
@@ -26,24 +28,9 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="py-16 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Fast Approval</h3>
-                <p>Get a decision in as little as 24 hours</p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Flexible Terms</h3>
-                <p>Loans tailored to your business needs</p>
-              </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">Expert Support</h3>
-                <p>Dedicated advisors to guide you</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <WhyChooseUs />
+
+        <Testimonials />
 
         <FAQ />
 
