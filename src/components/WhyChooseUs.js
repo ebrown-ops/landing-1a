@@ -38,7 +38,7 @@ export default function WhyChooseUs() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
             >
-              <Card className="h-full">
+              <Card className="h-full hover:shadow-lg transition-shadow duration-300">
                 <CardContent className="p-6 text-center">
                   <motion.div
                     whileHover={{ scale: 1.1 }}
