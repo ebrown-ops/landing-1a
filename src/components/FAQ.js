@@ -34,9 +34,9 @@ export default function FAQ() {
   );
 
   return (
-    <div className="py-16 bg-gray-50">
+    <div className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-blue-900 mb-8">Frequently Asked Questions</h2>
+        <h2 className="text-3xl font-bold text-center text-blue-900 dark:text-blue-100 mb-8">Frequently Asked Questions</h2>
         <Input
           type="text"
           placeholder="Search FAQs..."
@@ -53,7 +53,7 @@ export default function FAQ() {
           ))}
         </Accordion>
         {filteredFAQs.length === 0 && (
-          <p className="text-center text-gray-600 mt-4">No matching FAQs found. Please try a different search term.</p>
+          <p className="text-center text-gray-600 dark:text-gray-400 mt-4">No matching FAQs found. Please try a different search term.</p>
         )}
       </div>
     </div>
