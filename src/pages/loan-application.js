@@ -8,6 +8,7 @@ import LoanDetailsStep from '@/components/LoanDetailsStep';
 import ConfirmationStep from '@/components/ConfirmationStep';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
   { id: 'personal', title: 'Personal Info' },
@@ -39,11 +40,11 @@ export default function LoanApplication() {
   const renderStep = () => {
     switch (currentStep) {
       case 0:
-        return <PersonalInfoStep updateFormData={updateFormData} formData={formData} />;
+        return <PersonalInfoStep updateFormData={updateFormData} formData={formData} nextStep={nextStep} />;
       case 1:
-        return <BusinessInfoStep updateFormData={updateFormData} formData={formData} />;
+        return <BusinessInfoStep updateFormData={updateFormData} formData={formData} nextStep={nextStep} />;
       case 2:
-        return <LoanDetailsStep updateFormData={updateFormData} formData={formData} />;
+        return <LoanDetailsStep updateFormData={updateFormData} formData={formData} nextStep={nextStep} />;
       case 3:
         return <ConfirmationStep formData={formData} />;
       default:
@@ -89,7 +90,17 @@ export default function LoanApplication() {
               </ol>
             </nav>
 
-            {renderStep()}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentStep}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -50 }}
+                transition={{ duration: 0.3 }}
+              >
+                {renderStep()}
+              </motion.div>
+            </AnimatePresence>
 
             <div className="mt-8 flex justify-between">
               <Button onClick={prevStep} disabled={currentStep === 0} variant="outline">

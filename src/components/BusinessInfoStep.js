@@ -1,98 +1,102 @@
-import { useState } from 'react';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-export default function BusinessInfoStep({ updateFormData, formData }) {
-  const [businessName, setBusinessName] = useState(formData.businessName || '');
-  const [businessType, setBusinessType] = useState(formData.businessType || '');
-  const [yearsInBusiness, setYearsInBusiness] = useState(formData.yearsInBusiness || '');
-  const [annualRevenue, setAnnualRevenue] = useState(formData.annualRevenue || '');
+const schema = z.object({
+  businessName: z.string().min(2, "Business name must be at least 2 characters"),
+  businessType: z.string().min(1, "Please select a business type"),
+  yearsInBusiness: z.number().min(0, "Years in business must be 0 or greater"),
+  annualRevenue: z.number().min(0, "Annual revenue must be 0 or greater")
+});
 
-  const handleChange = (field, value) => {
-    const updatedData = { [field]: value };
-    updateFormData(updatedData);
-    switch (field) {
-      case 'businessName':
-        setBusinessName(value);
-        break;
-      case 'businessType':
-        setBusinessType(value);
-        break;
-      case 'yearsInBusiness':
-        setYearsInBusiness(value);
-        break;
-      case 'annualRevenue':
-        setAnnualRevenue(value);
-        break;
+export default function BusinessInfoStep({ updateFormData, formData, nextStep }) {
+  const form = useForm({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      businessName: formData.businessName || "",
+      businessType: formData.businessType || "",
+      yearsInBusiness: formData.yearsInBusiness || "",
+      annualRevenue: formData.annualRevenue || ""
     }
+  });
+
+  const onSubmit = (data) => {
+    updateFormData(data);
+    nextStep();
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-4">Business Information</h2>
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="businessName">Business Name</Label>
-          <Input
-            id="businessName"
-            type="text"
-            placeholder="Acme Inc."
-            value={businessName}
-            onChange={(e) => handleChange('businessName', e.target.value)}
-            className="mt-1"
-            required
-          />
-        </div>
-        <div>
-          <Label htmlFor="businessType">Business Type</Label>
-          <Select onValueChange={(value) => handleChange('businessType', value)} value={businessType}>
-            <SelectTrigger className="mt-1">
-              <SelectValue placeholder="Select business type" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="sole_proprietorship">Sole Proprietorship</SelectItem>
-              <SelectItem value="partnership">Partnership</SelectItem>
-              <SelectItem value="llc">LLC</SelectItem>
-              <SelectItem value="corporation">Corporation</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="yearsInBusiness">Years in Business</Label>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Input
-                  id="yearsInBusiness"
-                  type="number"
-                  placeholder="5"
-                  value={yearsInBusiness}
-                  onChange={(e) => handleChange('yearsInBusiness', e.target.value)}
-                  className="mt-1"
-                  required
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Enter the number of years your business has been operating.</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </div>
-        <div>
-          <Label htmlFor="annualRevenue">Annual Revenue ($)</Label>
-          <Input
-            id="annualRevenue"
-            type="number"
-            placeholder="500000"
-            value={annualRevenue}
-            onChange={(e) => handleChange('annualRevenue', e.target.value)}
-            className="mt-1"
-            required
-          />
-        </div>
-      </div>
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <FormField
+          control={form.control}
+          name="businessName"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Business Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Acme Inc." {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="businessType"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Business Type</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select business type" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="sole_proprietorship">Sole Proprietorship</SelectItem>
+                  <SelectItem value="partnership">Partnership</SelectItem>
+                  <SelectItem value="llc">LLC</SelectItem>
+                  <SelectItem value="corporation">Corporation</SelectItem>
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="yearsInBusiness"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Years in Business</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="5" {...field} onChange={(e) => field.onChange(+e.target.value)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="annualRevenue"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Annual Revenue ($)</FormLabel>
+              <FormControl>
+                <Input type="number" placeholder="500000" {...field} onChange={(e) => field.onChange(+e.target.value)} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">Next</Button>
+      </form>
+    </Form>
   );
 }
