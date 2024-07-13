@@ -10,6 +10,7 @@ import AnimatedStatistics from '@/components/AnimatedStatistics'
 import Chatbot from '@/components/Chatbot'
 import NewsletterSignup from '@/components/NewsletterSignup'
 import FeaturedIn from '@/components/FeaturedIn'
+import TestComponent from '@/components/TestComponent'
 
 export default function Home() {
   return (
@@ -32,6 +33,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <TestComponent />
 
         <AnimatedStatistics />
 

@@ -16,6 +16,7 @@ class ErrorBoundary extends React.Component {
       error: error,
       errorInfo: errorInfo
     });
+    console.error('Error caught by ErrorBoundary:', error, errorInfo);
     // You can also log the error to an error reporting service here
   }
 
@@ -25,7 +26,14 @@ class ErrorBoundary extends React.Component {
         <Alert variant="destructive">
           <AlertTitle>Something went wrong</AlertTitle>
           <AlertDescription>
-            We're sorry, but an error occurred. Please try refreshing the page or contact support if the problem persists.
+            <p>We're sorry, but an error occurred. Please try refreshing the page or contact support if the problem persists.</p>
+            {process.env.NODE_ENV === 'development' && (
+              <details style={{ whiteSpace: 'pre-wrap' }}>
+                {this.state.error && this.state.error.toString()}
+                <br />
+                {this.state.errorInfo.componentStack}
+              </details>
+            )}
           </AlertDescription>
         </Alert>
       );

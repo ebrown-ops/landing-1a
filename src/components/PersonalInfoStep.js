@@ -12,7 +12,7 @@ const schema = z.object({
   phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits")
 });
 
-export default function PersonalInfoStep({ updateFormData, formData }) {
+export default function PersonalInfoStep({ updateFormData, formData, nextStep }) {
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -24,6 +24,7 @@ export default function PersonalInfoStep({ updateFormData, formData }) {
 
   const onSubmit = (data) => {
     updateFormData(data);
+    nextStep();
   };
 
   return (
