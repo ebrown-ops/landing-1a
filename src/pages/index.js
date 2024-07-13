@@ -6,6 +6,8 @@ import FAQ from '@/components/FAQ'
 import Testimonials from '@/components/Testimonials'
 import WhyChooseUs from '@/components/WhyChooseUs'
 import LoanCalculator from '@/components/LoanCalculator'
+import AnimatedStatistics from '@/components/AnimatedStatistics'
+import Chatbot from '@/components/Chatbot'
 
 export default function Home() {
   return (
@@ -28,6 +30,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+
+        <AnimatedStatistics />
 
         <WhyChooseUs />
 
@@ -52,6 +56,7 @@ export default function Home() {
         </div>
       </main>
       <Footer />
+      <Chatbot />
     </div>
   )
 }
