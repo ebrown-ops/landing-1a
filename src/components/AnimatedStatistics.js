@@ -33,7 +33,7 @@ export default function AnimatedStatistics() {
                 transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 2 }}
                 className="text-4xl font-bold text-blue-600 dark:text-blue-400 mb-2"
               >
-                {stat.prefix}{stat.value}{stat.suffix}
+                {stat.prefix || ''}{stat.value.toLocaleString()}{stat.suffix || ''}
               </motion.div>
               <div className="text-lg text-gray-600 dark:text-gray-300">{stat.label}</div>
             </motion.div>
