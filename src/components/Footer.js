@@ -34,7 +34,7 @@ export default function Footer() {
         </div>
         <div className="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
           <div className="flex justify-between items-center">
-            <p className="text-sm text-gray-600 dark:text-gray-400">&copy; 2023 SMB Loans. All rights reserved.</p>
+            <p className="text-sm text-gray-600 dark:text-gray-400">&copy; {new Date().getFullYear()} SMB Loans. All rights reserved.</p>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"><Facebook size={20} /></a>
               <a href="#" className="text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"><Twitter size={20} /></a>
